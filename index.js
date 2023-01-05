@@ -21,6 +21,13 @@ async function  run(){
     try{
         await client.connect();
         
+        const inventoryCollection = client.db("inventoryData").collection("products");
+
+        app.get('/products', async (req, res) => {
+            const product = inventoryCollection.find({});
+            let result = await product.toArray();
+            res.send(result);
+        })
 
     }finally{
 
