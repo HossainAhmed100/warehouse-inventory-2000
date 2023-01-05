@@ -29,6 +29,12 @@ async function  run(){
             res.send(result);
         })
 
+        app.post('/addproducts', async(req, res) => {
+            const query = req.body;
+            const result = await inventoryCollection.insertOne(query);
+            res.send(result);
+        })
+
     }finally{
 
     }
