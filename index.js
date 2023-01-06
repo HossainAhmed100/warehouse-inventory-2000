@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT;
 
 app.use(cors());
@@ -32,6 +32,30 @@ async function  run(){
         app.post('/addproducts', async(req, res) => {
             const query = req.body;
             const result = await inventoryCollection.insertOne(query);
+            res.send(result);
+        })
+
+        app.delete('/deleteItem/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await inventoryCollection.deleteOne(query);
+            res.send(result)
+        })
+
+        app.get('/productitemInfo/:id', async(req, res) => {
+            const query = req.params.id;
+            const items = {_id: ObjectId(query)};
+            const result = await inventoryCollection.findOne(items);
+            res.send(result);
+        })
+
+        app.put('/updateQuantity/:id', async(req, res) => {
+            const id = req.params.id;
+            const quantity = req.body.quantity;
+            const query = {_id: ObjectId(id)};
+            const options = {upsert: true};
+            const updateDoc = {$set: {quantity: quantity }};
+            const result = await inventoryCollection.updateOne(query, updateDoc, options);
             res.send(result);
         })
 
