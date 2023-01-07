@@ -40,6 +40,7 @@ async function  run(){
             const query = {_id: ObjectId(id)};
             const result = await inventoryCollection.deleteOne(query);
             res.send(result)
+            
         })
 
         app.get('/productitemInfo/:id', async(req, res) => {
