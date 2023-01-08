@@ -40,7 +40,7 @@ async function  run(){
             const query = {_id: ObjectId(id)};
             const result = await inventoryCollection.deleteOne(query);
             res.send(result)
-            
+
         })
 
         app.get('/productitemInfo/:id', async(req, res) => {
@@ -53,11 +53,19 @@ async function  run(){
         app.put('/updateQuantity/:id', async(req, res) => {
             const id = req.params.id;
             const quantity = req.body.quantity;
+            const sold = req.body.sold;
             const query = {_id: ObjectId(id)};
             const options = {upsert: true};
-            const updateDoc = {$set: {quantity: quantity }};
+            const updateDoc = {$set: {quantity: quantity, sold: sold }};
             const result = await inventoryCollection.updateOne(query, updateDoc, options);
             res.send(result);
+        })
+
+        app.get('/getmyitems', async(req, res) => {
+            const userEmail = req.query.email;
+            const query = {email:  userEmail};
+            const result = await inventoryCollection.find(query).toArray();
+            res.send(result);   
         })
 
     }finally{
