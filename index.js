@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-const jwt = require("jsonwebtoken");
-const cors = require("cors");
 require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const jwt = require("jsonwebtoken");
+const cors = require("cors");
 const port = process.env.PORT;
 
 app.use(cors());
@@ -45,6 +45,12 @@ async function run() {
       .collection("products");
 
     app.get("/products", async (req, res) => {
+      const product = inventoryCollection.find({});
+      let result = await product.toArray();
+      res.send(result);
+    });
+
+    app.get("/", async (req, res) => {
       const product = inventoryCollection.find({});
       let result = await product.toArray();
       res.send(result);
